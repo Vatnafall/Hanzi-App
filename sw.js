@@ -1,7 +1,7 @@
-const CACHE='hanzi-v7.5-wowmao';
+const CACHE='hanzi-v7.6-wowmao';
 const FONT_CACHE='wowmao-wenkai-1.7.0';
 const FONT_ROOT='https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/';
-const FILES=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./firework-round.mp3','./firework-chapter.mp3'];
+const FILES=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./cat-round.mp3','./cat-chapter.mp3'];
 self.addEventListener('install',e=>e.waitUntil((async()=>{
  const c=await caches.open(CACHE);
  await c.addAll(FILES.map(path=>new Request(new URL(path,self.registration.scope),{cache:'reload'})));
@@ -17,7 +17,7 @@ self.addEventListener('fetch',e=>{
  }
  if(new URL(req.url).origin!==self.location.origin)return;
  // Safari media requests can require byte ranges, including offline.
- if(/\/firework-(round|chapter)\.mp3$/.test(new URL(req.url).pathname)){
+ if(/\/cat-(round|chapter)\.mp3$/.test(new URL(req.url).pathname)){
   e.respondWith((async()=>{const c=await caches.open(CACHE);let full=await c.match(req.url);if(!full){full=await fetch(req.url,{cache:'reload'});if(full.ok&&full.status===200)try{await c.put(req.url,full.clone())}catch(e){}}const range=req.headers.get('Range');if(!range||full.status!==200)return full;const m=/^bytes=(\d*)-(\d*)$/.exec(range);if(!m)return full;const bytes=await full.arrayBuffer(),n=bytes.byteLength;if(!m[1]&&!m[2])return new Response(null,{status:416,headers:{'Content-Range':'bytes */'+n}});const start=m[1]?Number(m[1]):Math.max(0,n-Number(m[2]));const end=m[1]&&m[2]?Math.min(n-1,Number(m[2])):n-1;if(start>=n||start>end)return new Response(null,{status:416,headers:{'Content-Range':'bytes */'+n}});return new Response(bytes.slice(start,end+1),{status:206,headers:{'Content-Type':'audio/mpeg','Accept-Ranges':'bytes','Content-Range':`bytes ${start}-${end}/${n}`,'Content-Length':String(end-start+1)}})})());return;
  }
  e.respondWith((async()=>{
