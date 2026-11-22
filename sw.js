@@ -1,4 +1,4 @@
-const CACHE='hanzi-v9.6-wowmao';
+const CACHE='hanzi-v9.7-wowmao';
 const FONT_CACHE='wowmao-wenkai-1.7.0';
 const FONT_ROOT='https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/';
 const FILES=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./cat-round.mp3','./cat-chapter.mp3'];
